@@ -1,0 +1,22 @@
+name: Sonar Cloud 代码扫描
+on:
+  push:
+    branches: [ main, master ]  # 推送到主分支自动扫
+  pull_request:
+    branches: [ main, master ]  # 提PR自动扫
+  workflow_dispatch:            # 支持手动触发扫描
+
+jobs:
+  sonarcloud:
+    name: SonarCloud Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 必须，否则扫描异常
+
+      - name: SonarCloud 扫描
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
